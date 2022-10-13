@@ -8,6 +8,8 @@ import numpy as np
 inputImage = cv.imread("Resources/CroppedAndPerspectiveCorrected/1.jpg")
 
 # 2) Pre-process input image (change to grayscale or hsv?, remove noise?).
+
+# Source: kode gennemgang af lecture 3 opgaver
 hsv_conversion = np.zeros(inputImage.shape, dtype=np.uint8)
 for y, row in enumerate(inputImage):
     for x, uintpixel in enumerate(row):
