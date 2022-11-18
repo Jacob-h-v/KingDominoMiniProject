@@ -4,10 +4,22 @@
 import cv2 as cv
 import numpy as np
 
-# 1) Read input image.
+# 1) read image
+
+# 2) check for crowns (will need 4 rotations)
+
+# 3) check for similar areas connected to crown
+        # pre-save templates (maybe using H-channel from hsv to look for specific colors)
+
+# 4) disregard the rest
+
+# 5) display outcome
+
+
+# Read input image.
 inputImage = cv.imread("Resources/CroppedAndPerspectiveCorrected/1.jpg")
 
-# 2) Pre-process input image (change to grayscale or hsv?, remove noise?).
+# changing to HSV
 
 # Source: kode gennemgang af lecture 3 opgaver
 hsv_conversion = np.zeros(inputImage.shape, dtype=np.uint8)
