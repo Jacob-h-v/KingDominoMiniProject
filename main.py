@@ -6,6 +6,7 @@ import imutils
 import numpy as np
 from CropTemplate import TemplateCropping, Crop
 from TemplateMatching import MatchTemplate
+from HSVConvertion import SplitHSV
 
 
 # 1) read inputs
@@ -23,23 +24,35 @@ template270 = imutils.rotate(template, angle=270)
 output1, matchCount1 = MatchTemplate(input, template)
 output2, matchCount2 = MatchTemplate(output1, template90)
 output3, matchCount3 = MatchTemplate(output2, template180)
-output4, matchCount4 = MatchTemplate(output3, template270)
+outputFinal, matchCount4 = MatchTemplate(output3, template270)
 matchCountFinal = matchCount1 + matchCount2 + matchCount3 + matchCount4
 print(F"Crowns: {matchCountFinal}")
 
 # 3) check for similar areas connected to crown
-        # pre-save templates (maybe using H-channel from hsv to look for specific colors)
+
+# split image to H S and V channels. Might be useful for checking hue / value channels when matching areas
+hsvImage = SplitHSV(input)
+H = hsvImage[:, :, 0]
+S = hsvImage[:, :, 1]
+V = hsvImage[:, :, 2]
+
+# Split play field into tiles
+
 
 # 4) disregard the rest
 
 # 5) display outcome
 
-cv.imshow("Output4", output4)
-cv.imshow("template", template)
-cv.imshow("template90", template90)
-cv.imshow("template180", template180)
-cv.imshow("template270", template270)
-cv.imshow("Output1", output1)
-cv.imshow("Output2", output2)
-cv.imshow("Output3", output3)
+cv.imshow("HSV Image", hsvImage)
+cv.imshow("H", H)
+cv.imshow("S", S)
+cv.imshow("V", V)
+# cv.imshow("OutputFinal", outputFinal)
+# cv.imshow("template", template)
+# cv.imshow("template90", template90)
+# cv.imshow("template180", template180)
+# cv.imshow("template270", template270)
+# cv.imshow("Output1", output1)
+# cv.imshow("Output2", output2)
+# cv.imshow("Output3", output3)
 cv.waitKey(0)

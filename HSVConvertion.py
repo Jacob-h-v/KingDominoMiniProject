@@ -34,3 +34,7 @@ def SplitHSV(image):
             hsv_conversion[y, x, 0] = H
             hsv_conversion[y, x, 1] = S
             hsv_conversion[y, x, 2] = V
+    return hsv_conversion
+
+
+
