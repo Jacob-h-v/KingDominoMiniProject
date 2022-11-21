@@ -2,14 +2,16 @@ import cv2 as cv
 import numpy as np
 from NonMaximaSuppression import nonMaxSupp
 
-def MatchTemplate(image, processed, template, kernelsize):
+# def MatchTemplate(image, processed, template):
+def MatchTemplate(image, template):
     image = np.array(image, dtype=np.uint8)
-    processed = np.array(processed, dtype=np.uint8)
+    # processed = np.array(processed, dtype=np.uint8)
     template = np.array(template, dtype=np.uint8)
     templateHeight, templateWidth = template.shape[:2]
 
-    res = cv.matchTemplate(processed, template, cv.TM_CCOEFF_NORMED)
-    threshold = 0.40
+    # res = cv.matchTemplate(processed, template, cv.TM_CCOEFF_NORMED)
+    res = cv.matchTemplate(image, template, cv.TM_CCOEFF_NORMED)
+    threshold = 0.75
     (yCoords, xCoords) = np.where(res >= threshold)
 
     rects = []
@@ -23,7 +25,7 @@ def MatchTemplate(image, processed, template, kernelsize):
     # Loop over final bounding boxes
     for (startX, startY, endX, endY) in pickedIndexes:
         # draw bounding on output
-        cv.rectangle(image, (startX + kernelsize, startY + kernelsize//2), (endX + kernelsize, endY + kernelsize//2), (0, 0, 255), 3)
+        cv.rectangle(image, (startX, startY), (endX, endY), (0, 0, 255), 3)
 
     # Return the output image
     return image, resultAmount

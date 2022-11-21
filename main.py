@@ -2,11 +2,30 @@
 
 # Imported libraries
 import cv2 as cv
+import imutils
 import numpy as np
+from CropTemplate import TemplateCropping, Crop
+from TemplateMatching import MatchTemplate
 
-# 1) read image
+
+# 1) read inputs
+input = cv.imread("Resources/CroppedAndPerspectiveCorrected/1.jpg")
+#templateCoordinates = TemplateCropping(input)
+#template = Crop(input, templateCoordinates[0], templateCoordinates[1], templateCoordinates[2], templateCoordinates[3])
+template = cv.imread("Resources/CrownTemplate.jpg")
+
+# crop to play field if needed
 
 # 2) check for crowns (will need 4 rotations)
+template90 = imutils.rotate(template, angle=90)
+template180 = imutils.rotate(template, angle=180)
+template270 = imutils.rotate(template, angle=270)
+output1, matchCount1 = MatchTemplate(input, template)
+output2, matchCount2 = MatchTemplate(output1, template90)
+output3, matchCount3 = MatchTemplate(output2, template180)
+output4, matchCount4 = MatchTemplate(output3, template270)
+matchCountFinal = matchCount1 + matchCount2 + matchCount3 + matchCount4
+print(F"Crowns: {matchCountFinal}")
 
 # 3) check for similar areas connected to crown
         # pre-save templates (maybe using H-channel from hsv to look for specific colors)
@@ -15,56 +34,12 @@ import numpy as np
 
 # 5) display outcome
 
-
-# Read input image.
-inputImage = cv.imread("Resources/CroppedAndPerspectiveCorrected/1.jpg")
-
-# changing to HSV
-
-# Source: kode gennemgang af lecture 3 opgaver
-hsv_conversion = np.zeros(inputImage.shape, dtype=np.uint8)
-for y, row in enumerate(inputImage):
-    for x, uintpixel in enumerate(row):
-        pixel = uintpixel.astype(np.float64)/255
-
-        R = pixel[2]
-        G = pixel[1]
-        B = pixel[0]
-
-        V = pixel.max()
-        S = 0
-        if V != 0:
-            S = (V-pixel.min())/V
-        H = 0
-        if R == G == B:
-            H = 0
-        elif V == pixel[2]:
-            H = (60 * (G-B))/(V-pixel.min())
-        elif V == G:
-            H = 120 + (60*(B-R)) / (V-pixel.min())
-        elif V == R:
-            H = 240 + (60*(R-G)) / (V-pixel.min())
-
-        if H < 0:
-            H += 360
-
-        H /= 2
-        S *= 255
-        V *= 255
-        hsv_conversion[y, x, 0] = H
-        hsv_conversion[y, x, 1] = S
-        hsv_conversion[y, x, 2] = V
-
-
-# 3) Read or generate template.
-
-# 4) Pre-process template.
-
-# 5) Check template for similarities against slices of input image.
-
-# display image output
-cv.imshow("inputImage", inputImage)
-cv.imshow("H channel", hsv_conversion[:, :, 0])
-cv.imshow("S channel", hsv_conversion[:, :, 1])
-cv.imshow("V channel", hsv_conversion[:, :, 2])
+cv.imshow("Output4", output4)
+cv.imshow("template", template)
+cv.imshow("template90", template90)
+cv.imshow("template180", template180)
+cv.imshow("template270", template270)
+cv.imshow("Output1", output1)
+cv.imshow("Output2", output2)
+cv.imshow("Output3", output3)
 cv.waitKey(0)
