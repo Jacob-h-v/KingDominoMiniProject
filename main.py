@@ -29,7 +29,7 @@ outputFinal, matchCount4 = MatchTemplate(output3, template270)
 matchCountFinal = matchCount1 + matchCount2 + matchCount3 + matchCount4
 print(F"Crowns: {matchCountFinal}")
 
-# 3) check for similar areas connected to crown
+# 3) Get point-giving stuff
 
 # split image to H S and V channels. Might be useful for checking hue / value channels when matching areas
 hsvImage = SplitHSV(input)
@@ -39,6 +39,10 @@ V = hsvImage[:, :, 2]
 
 # Split play field into tiles
 
+
+# check for connected areas and count them
+
+# Multiply connected area score by number of crowns (bounding boxes) in area
 
 # 4) disregard the rest
 
