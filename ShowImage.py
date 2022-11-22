@@ -1,5 +1,12 @@
 import cv2 as cv
-image = cv.imread("Resources/TileTemplates/ForestTile.jpg")
+from AreaMatching import CropArea, GetArea
+from HSVConvertion import SplitHSV
+image = cv.imread("Resources/CroppedAndPerspectiveCorrected/6.jpg")
 
-cv.imshow("Tile", image)
-cv.waitKey(0)
+
+avgSaturationForest = np.mean(forestSaturation)
+avgSaturationGrass = np.mean(grassSaturation)
+avgSaturationMine = np.mean(mineSaturation)
+avgSaturationSand = np.mean(sandSaturation)
+avgSaturationWastes = np.mean(wastesSaturation)
+avgSaturationWater = np.mean(waterSaturation)
