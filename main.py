@@ -22,10 +22,10 @@ template90 = imutils.rotate(template, angle=90)
 template180 = imutils.rotate(template, angle=180)
 template270 = imutils.rotate(template, angle=270)
 
-output1, matchCount1 = MatchTemplate(input, template)
-output2, matchCount2 = MatchTemplate(output1, template90)
-output3, matchCount3 = MatchTemplate(output2, template180)
-outputFinal, matchCount4 = MatchTemplate(output3, template270)
+output1, matchCount1 = MatchTemplate(input, template, 0.75)
+output2, matchCount2 = MatchTemplate(output1, template90, 0.75)
+output3, matchCount3 = MatchTemplate(output2, template180, 0.75)
+outputFinal, matchCount4 = MatchTemplate(output3, template270, 0.75)
 matchCountFinal = matchCount1 + matchCount2 + matchCount3 + matchCount4
 print(F"Crowns: {matchCountFinal}")
 
@@ -38,6 +38,7 @@ S = hsvImage[:, :, 1]
 V = hsvImage[:, :, 2]
 
 # Split play field into tiles
+
 
 
 # check for connected areas and count them

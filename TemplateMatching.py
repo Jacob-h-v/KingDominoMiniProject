@@ -3,7 +3,7 @@ import numpy as np
 from NonMaximaSuppression import nonMaxSupp
 
 # def MatchTemplate(image, processed, template):
-def MatchTemplate(image, template):
+def MatchTemplate(image, template, thresh):
     image = np.array(image, dtype=np.uint8)
     # processed = np.array(processed, dtype=np.uint8)
     template = np.array(template, dtype=np.uint8)
@@ -11,7 +11,7 @@ def MatchTemplate(image, template):
 
     # res = cv.matchTemplate(processed, template, cv.TM_CCOEFF_NORMED)
     res = cv.matchTemplate(image, template, cv.TM_CCOEFF_NORMED)
-    threshold = 0.75
+    threshold = thresh
     (yCoords, xCoords) = np.where(res >= threshold)
 
     rects = []
