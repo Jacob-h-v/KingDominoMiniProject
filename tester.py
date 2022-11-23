@@ -45,31 +45,33 @@ row = 0
 column = 0
 match = False
 matches = 0
-identifiedTiles = np.zeros((5, 5), dtype=np.uint8)
-
-avgHueForest = np.mean(forestHue)
-avgHueGrass = np.mean(grassHue)
-avgHueMine = np.mean(mineHue)
-avgHueSand = np.mean(sandHue)
-avgHueWastes = np.mean(wastesHue)
-avgHueWater = np.mean(waterHue)
+identifiedTiles = np.zeros((5, 5), dtype=str)
+# identifiedTiles = [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
+meanHueForest = np.mean(forestHue)
+meanHueGrass = np.mean(grassHue)
+meanHueMine = np.mean(mineHue)
+meanHueSand = np.mean(sandHue)
+meanHueWastes = np.mean(wastesHue)
+meanHueWater = np.mean(waterHue)
 # ----------------------------------
-avgValueForest = np.mean(forestValue)
-avgValueGrass = np.mean(grassValue)
-avgValueMine = np.mean(mineValue)
-avgValueSand = np.mean(sandValue)
-avgValueWastes = np.mean(wastesValue)
-avgValueWater = np.mean(waterValue)
+meanValueForest = np.mean(forestValue)
+meanValueGrass = np.mean(grassValue)
+meanValueMine = np.mean(mineValue)
+meanValueSand = np.mean(sandValue)
+meanValueWastes = np.mean(wastesValue)
+meanValueWater = np.mean(waterValue)
 # -----------------------------------
-avgSaturationForest = np.mean(forestSaturation)
-avgSaturationGrass = np.mean(grassSaturation)
-avgSaturationMine = np.mean(mineSaturation)
-avgSaturationSand = np.mean(sandSaturation)
-avgSaturationWastes = np.mean(wastesSaturation)
-avgSaturationWater = np.mean(waterSaturation)
+meanSaturationForest = np.mean(forestSaturation)
+meanSaturationGrass = np.mean(grassSaturation)
+meanSaturationMine = np.mean(mineSaturation)
+meanSaturationSand = np.mean(sandSaturation)
+meanSaturationWastes = np.mean(wastesSaturation)
+meanSaturationWater = np.mean(waterSaturation)
 
 template = np.array(6, dtype=np.uint8)
-templateH = [0, avgHueForest, avgHueGrass, avgHueMine, avgHueSand, avgHueWastes, avgHueWater]
+templateH = [0, meanHueForest, meanHueGrass, meanHueMine, meanHueSand, meanHueWastes, meanHueWater]
+templateS = [0, meanSaturationForest, meanSaturationGrass, meanSaturationMine, meanSaturationSand, meanSaturationWastes, meanSaturationWater]
+templateV = [0, meanValueForest, meanValueGrass, meanValueMine, meanValueSand, meanValueWastes, meanValueWater]
 # templateImg = [0, forestH, grassH, mineH, sandH, wastesH, waterH]
 
 for i in range(1, 6):
@@ -81,15 +83,37 @@ for i in range(1, 6):
         for r in range(1, 7):
             regionHSV = SplitHSV(region)
             templateHue = templateH[r]
+            templateSat = templateS[r]
+            templateVal = templateV[r]
             regionHue = regionHSV[:, :, 0]
+            regionSat = regionHSV[:, :, 1]
+            regionVal = regionHSV[:, :, 2]
             regionMeanHue = np.mean(regionHue)
+            regionMeanSat = np.mean(regionSat)
+            regionMeanVal = np.mean(regionVal)
             hueVariance = abs(templateHue - regionMeanHue)
+            satVariance = abs(templateSat - regionMeanSat)
+            valVariance = abs(templateVal - regionMeanVal)
             # MSE = MeanSquaredError(region, b)
             print (i, j, r)
-            if hueVariance < 5:
+            if hueVariance < 15 and valVariance < 25 and satVariance < 35:
                 match = True
                 matches += 1
-                identifiedTiles[i-1, j-1] = r
+                if r == 0:
+                    tile = "u"
+                elif r == 1:
+                    tile = "f"
+                elif r == 2:
+                    tile = "g"
+                elif r == 3:
+                    tile = "m"
+                elif r == 4:
+                    tile = "s"
+                elif r == 5:
+                    tile = "d" # wastes.. d (dead)
+                elif r == 6:
+                    tile = "w"
+                identifiedTiles[i-1, j-1] = tile
                 print(match)
                 match = False
 
