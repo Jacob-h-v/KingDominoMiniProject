@@ -46,7 +46,6 @@ column = 0
 match = False
 matches = 0
 identifiedTiles = np.zeros((5, 5), dtype=str)
-# identifiedTiles = [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
 meanHueForest = np.mean(forestHue)
 meanHueGrass = np.mean(grassHue)
 meanHueMine = np.mean(mineHue)
@@ -72,7 +71,6 @@ template = np.array(6, dtype=np.uint8)
 templateH = [0, meanHueForest, meanHueGrass, meanHueMine, meanHueSand, meanHueWastes, meanHueWater]
 templateS = [0, meanSaturationForest, meanSaturationGrass, meanSaturationMine, meanSaturationSand, meanSaturationWastes, meanSaturationWater]
 templateV = [0, meanValueForest, meanValueGrass, meanValueMine, meanValueSand, meanValueWastes, meanValueWater]
-# templateImg = [0, forestH, grassH, mineH, sandH, wastesH, waterH]
 
 for i in range(1, 6):
     row = i
@@ -110,14 +108,14 @@ for i in range(1, 6):
                 elif r == 4:
                     tile = "s"
                 elif r == 5:
-                    tile = "d" # wastes.. d (dead)
+                    tile = "d"  # wastes.. d (dead)
                 elif r == 6:
                     tile = "w"
                 identifiedTiles[i-1, j-1] = tile
                 print(match)
                 match = False
 
-print (matches)
+print(matches)
 matches = 0
 print(identifiedTiles)
 
