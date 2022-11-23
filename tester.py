@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
-import math
-from AverageColor import MeanSquaredError, GetAvgColor
+import imutils
+# from AverageColor import MeanSquaredError, GetAvgColor
 from HSVConvertion import SplitHSV
 from AreaMatching import GetArea, CropArea
 from TemplateMatching import MatchTemplate
@@ -41,11 +41,14 @@ hsvImage = SplitHSV(imageInput)
 H = hsvImage[:, :, 0]
 S = hsvImage[:, :, 1]
 V = hsvImage[:, :, 2]
+
 row = 0
 column = 0
 match = False
 matches = 0
 identifiedTiles = np.zeros((5, 5), dtype=str)
+identifiedCrowns = np.zeros((5, 5), dtype=np.uint8)
+
 meanHueForest = np.mean(forestHue)
 meanHueGrass = np.mean(grassHue)
 meanHueMine = np.mean(mineHue)
@@ -67,7 +70,7 @@ meanSaturationSand = np.mean(sandSaturation)
 meanSaturationWastes = np.mean(wastesSaturation)
 meanSaturationWater = np.mean(waterSaturation)
 
-template = np.array(6, dtype=np.uint8)
+template = cv.imread("Resources/CrownTemplate.jpg")
 templateH = [0, meanHueForest, meanHueGrass, meanHueMine, meanHueSand, meanHueWastes, meanHueWater]
 templateS = [0, meanSaturationForest, meanSaturationGrass, meanSaturationMine, meanSaturationSand, meanSaturationWastes, meanSaturationWater]
 templateV = [0, meanValueForest, meanValueGrass, meanValueMine, meanValueSand, meanValueWastes, meanValueWater]
@@ -78,17 +81,32 @@ for i in range(1, 6):
         column = j
         x_start, y_start, x_end, y_end = GetArea(imageInput, row, column)
         region = CropArea(imageInput, x_start, y_start, x_end, y_end)
+
+        template90 = imutils.rotate(template, angle=90)
+        template180 = imutils.rotate(template, angle=180)
+        template270 = imutils.rotate(template, angle=270)
+
+        output1, matchCount1 = MatchTemplate(region, template, 0.75)
+        output2, matchCount2 = MatchTemplate(output1, template90, 0.75)
+        output3, matchCount3 = MatchTemplate(output2, template180, 0.75)
+        outputFinal, matchCount4 = MatchTemplate(output3, template270, 0.75)
+        matchCountFinal = matchCount1 + matchCount2 + matchCount3 + matchCount4
+        print(F"Crowns: {matchCountFinal}")
+        identifiedCrowns[i - 1, j - 1] = matchCountFinal
+        matchCountFinal = 0
+
+        regionHSV = SplitHSV(region)
+        regionHue = regionHSV[:, :, 0]
+        regionSat = regionHSV[:, :, 1]
+        regionVal = regionHSV[:, :, 2]
+        regionMeanHue = np.mean(regionHue)
+        regionMeanSat = np.mean(regionSat)
+        regionMeanVal = np.mean(regionVal)
+
         for r in range(1, 7):
-            regionHSV = SplitHSV(region)
             templateHue = templateH[r]
             templateSat = templateS[r]
             templateVal = templateV[r]
-            regionHue = regionHSV[:, :, 0]
-            regionSat = regionHSV[:, :, 1]
-            regionVal = regionHSV[:, :, 2]
-            regionMeanHue = np.mean(regionHue)
-            regionMeanSat = np.mean(regionSat)
-            regionMeanVal = np.mean(regionVal)
             hueVariance = abs(templateHue - regionMeanHue)
             satVariance = abs(templateSat - regionMeanSat)
             valVariance = abs(templateVal - regionMeanVal)
@@ -118,6 +136,7 @@ for i in range(1, 6):
 print(matches)
 matches = 0
 print(identifiedTiles)
+print(identifiedCrowns)
 
 
 
