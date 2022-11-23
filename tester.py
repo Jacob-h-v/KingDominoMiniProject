@@ -102,6 +102,7 @@ for i in range(1, 6):
         regionMeanHue = np.mean(regionHue)
         regionMeanSat = np.mean(regionSat)
         regionMeanVal = np.mean(regionVal)
+        identifiedTiles[i - 1, j - 1] = "x"
 
         for r in range(1, 7):
             templateHue = templateH[r]
@@ -132,6 +133,7 @@ for i in range(1, 6):
                 identifiedTiles[i-1, j-1] = tile
                 print(match)
                 match = False
+
 
 print(matches)
 matches = 0
