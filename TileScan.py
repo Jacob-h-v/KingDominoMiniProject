@@ -10,6 +10,7 @@ def IdentifyTiles(image):
 
     imageInput = image
     template = cv.imread("Resources/CrownTemplate.jpg")
+
     # RGB tiles ------------------------------------------------------
     forest = cv.imread("Resources/TileTemplates/Color/ForestColor.png")
     grass = cv.imread("Resources/TileTemplates/Color/GrassColor.png")
