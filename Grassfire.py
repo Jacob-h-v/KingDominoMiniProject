@@ -39,9 +39,11 @@ def ignite_pixel(tiles, coordinate, id, crownsArray):
                 burn_queue.append((y - 1, x))
 
         if len(burn_queue) == 0:
+            if connectedTiles == 1:
+                connectedTiles = 0
             scoreCount = crownCount * connectedTiles
             return id + 50, scoreCount
-    return id, scoreCount
+    return id
 
 
 def grassfire(tiles, crownsArray):
