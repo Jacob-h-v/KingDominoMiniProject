@@ -48,7 +48,7 @@ def IdentifyTiles(image):
     column = 0
     match = False
     matches = 0
-    identifiedTiles = np.zeros((5, 5), dtype=str)
+    identifiedTiles = np.zeros((5, 5), dtype=np.uint8)
     identifiedCrowns = np.zeros((5, 5), dtype=np.uint8)
 
     meanHueForest = np.mean(forestHue)
@@ -93,7 +93,7 @@ def IdentifyTiles(image):
             output3, matchCount3 = MatchTemplate(output2, template180, 0.75)
             outputFinal, matchCount4 = MatchTemplate(output3, template270, 0.75)
             matchCountFinal = matchCount1 + matchCount2 + matchCount3 + matchCount4
-            identifiedCrowns[i - 1, j - 1] = matchCountFinal
+            identifiedCrowns[j - 1, i - 1] = matchCountFinal
             crownsTemp = matchCountFinal
             matchCountFinal = 0
 
