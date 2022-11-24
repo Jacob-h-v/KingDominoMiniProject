@@ -1,6 +1,4 @@
 from collections import deque
-import numpy as np
-import cv2 as cv
 
 # img = np.array([[2, 6, 1, 1, 1],
               #  [2, 1, 1, 1, 2],
@@ -43,12 +41,8 @@ def ignite_pixel(tiles, coordinate, id, crownsArray):
 
         if len(burn_queue) == 0:
             scoreCount = crownCount * connectedTiles
-            connectedTiles = 0
-            crownCount = 0
             return id + 50, scoreCount
             print(img)
-    connectedTiles = 0
-    crownCount = 0
     return id, scoreCount
 
 
