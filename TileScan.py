@@ -1,18 +1,15 @@
 import cv2 as cv
 import numpy as np
 import imutils
-# from AverageColor import MeanSquaredError, GetAvgColor
+
 from HSVConvertion import SplitHSV
 from AreaMatching import GetArea, CropArea
 from TemplateMatching import MatchTemplate
 
-imageInput = cv.imread("Resources/CroppedAndPerspectiveCorrected/1.jpg")
-imageInput = np.array(imageInput, dtype=np.uint8)
-
-
 def IdentifyTiles(image):
 
-
+    imageInput = image
+    template = cv.imread("Resources/CrownTemplate.jpg")
     # RGB tiles ------------------------------------------------------
     forest = cv.imread("Resources/TileTemplates/Color/ForestColor.png")
     grass = cv.imread("Resources/TileTemplates/Color/GrassColor.png")
@@ -75,7 +72,6 @@ def IdentifyTiles(image):
     meanSaturationWastes = np.mean(wastesSaturation)
     meanSaturationWater = np.mean(waterSaturation)
 
-    template = cv.imread("Resources/CrownTemplate.jpg")
     templateH = [0, meanHueForest, meanHueGrass, meanHueMine, meanHueSand, meanHueWastes, meanHueWater]
     templateS = [0, meanSaturationForest, meanSaturationGrass, meanSaturationMine, meanSaturationSand, meanSaturationWastes,
              meanSaturationWater]
@@ -97,8 +93,8 @@ def IdentifyTiles(image):
             output3, matchCount3 = MatchTemplate(output2, template180, 0.75)
             outputFinal, matchCount4 = MatchTemplate(output3, template270, 0.75)
             matchCountFinal = matchCount1 + matchCount2 + matchCount3 + matchCount4
-            print(F"Crowns: {matchCountFinal}")
             identifiedCrowns[i - 1, j - 1] = matchCountFinal
+            crownsTemp = matchCountFinal
             matchCountFinal = 0
 
             regionHSV = SplitHSV(region)
@@ -108,7 +104,7 @@ def IdentifyTiles(image):
             regionMeanHue = np.mean(regionHue)
             regionMeanSat = np.mean(regionSat)
             regionMeanVal = np.mean(regionVal)
-            identifiedTiles[i - 1, j - 1] = "x"
+            identifiedTiles[j - 1, i - 1] = "x"
 
             for r in range(1, 7):
                 templateHue = templateH[r]
@@ -118,7 +114,7 @@ def IdentifyTiles(image):
                 satVariance = abs(templateSat - regionMeanSat)
                 valVariance = abs(templateVal - regionMeanVal)
                 # MSE = MeanSquaredError(region, b)
-                print(i, j, r)
+
                 if hueVariance < 15 and valVariance < 25 and satVariance < 35:
                     match = True
                     matches += 1
@@ -136,17 +132,8 @@ def IdentifyTiles(image):
                         tile = "d"  # wastes.. d (dead)
                     elif r == 6:
                         tile = "w"
-                    identifiedTiles[i - 1, j - 1] = tile
-                    print(match)
+                    identifiedTiles[j - 1, i - 1] = tile
+                    print(F"Tile identified on coordinates {i},{j}. Number of crowns on tile: {crownsTemp}")
                     match = False
+
     return identifiedTiles, identifiedCrowns
-
-
-# print(matches)
-# matches = 0
-# print(identifiedTiles)
-# print(identifiedCrowns)
-
-
-
-
