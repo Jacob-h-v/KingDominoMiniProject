@@ -21,6 +21,7 @@ scoreCount = grassfire(identifiedTiles, identifiedCrowns)
 print(scoreCount)
 
 # 5) display outcome
+finalDisplay = cv.putText(inputImage, f"Proposed score: {scoreCount}", (15, 65), 1, 2, (0, 0, 255), 3, cv.LINE_AA)
 
-
-# cv.waitKey(0)
+cv.imshow("score window", finalDisplay)
+cv.waitKey(0)
