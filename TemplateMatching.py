@@ -20,7 +20,7 @@ def MatchTemplate(image, template, thresh):
 
     pickedIndexes = nonMaxSupp(np.array(rects), 0.1)
     resultAmount = len(pickedIndexes)
-    print(resultAmount)
+    # print(resultAmount)
 
     # Loop over final bounding boxes
     for (startX, startY, endX, endY) in pickedIndexes:
