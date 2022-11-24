@@ -13,8 +13,8 @@ def ignite_pixel(image, coordinate, id):
     x, y = coordinate
     burn_queue = deque()
 
-    if image[y, x] == 2:
-        burn_queue.append((y, x))
+    num = image[y, x]
+    burn_queue.append((y, x))
 
     while len(burn_queue) > 0:
         current_coordinate = burn_queue.pop()
@@ -22,13 +22,13 @@ def ignite_pixel(image, coordinate, id):
         if image[y, x] == 2:
             image[y, x] = id
 
-            if x + 1 < image.shape[1] and image[y, x + 1] == 2:
+            if x + 1 < image.shape[1] and image[y, x + 1] == num:
                 burn_queue.append((y, x + 1))
-            if y + 1 < image.shape[0] and image[y + 1, x] == 2:
+            if y + 1 < image.shape[0] and image[y + 1, x] == num:
                 burn_queue.append((y + 1, x))
-            if x - 1 >= 0 and image[y, x - 1] == 2:
+            if x - 1 >= 0 and image[y, x - 1] == num:
                 burn_queue.append((y, x - 1))
-            if y - 1 >= 0 and image[y - 1, x] == 2:
+            if y - 1 >= 0 and image[y - 1, x] == num:
                 burn_queue.append((y - 1, x))
 
         #print(image)
@@ -36,9 +36,10 @@ def ignite_pixel(image, coordinate, id):
         #input()
 
         if len(burn_queue) == 0:
-            return id + 50
+            return id
+            print(img)
 
-    return id
+    #return id
 
 
 def grassfire(image):
@@ -49,6 +50,6 @@ def grassfire(image):
 
 grassfire(img)
 
-#print(img)
+print(img)
 cv.imshow("Output", img)
 cv.waitKey()
