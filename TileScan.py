@@ -133,7 +133,6 @@ def IdentifyTiles(image):
                     elif r == 6:
                         tile = "w"
                     identifiedTiles[j - 1, i - 1] = r
-                    print(F"Tile identified on coordinates {i},{j}. Number of crowns on tile: {crownsTemp}")
                     match = False
 
     return identifiedTiles, identifiedCrowns

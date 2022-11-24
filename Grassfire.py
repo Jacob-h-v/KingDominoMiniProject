@@ -37,12 +37,10 @@ def ignite_pixel(tiles, coordinate, id, crownsArray):
                 burn_queue.append((y, x - 1))
             if y - 1 >= 0 and tiles[y - 1, x] == currentType:
                 burn_queue.append((y - 1, x))
-            print(tiles)
 
         if len(burn_queue) == 0:
             scoreCount = crownCount * connectedTiles
             return id + 50, scoreCount
-            print(img)
     return id, scoreCount
 
 
