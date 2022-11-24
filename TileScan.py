@@ -16,28 +16,28 @@ def IdentifyTiles(image):
     mine = cv.imread("Resources/TileTemplates/Color/MineColor.png")
     sand = cv.imread("Resources/TileTemplates/Color/SandColor.png")
     wastes = cv.imread("Resources/TileTemplates/Color/WastesColor.png")
-    water = cv.imread("Resources/TileTemplates/Color/WaterColor.png")
+    water = cv.imread("Resources/TileTemplates/Color/WaterColor2.png")
     # Hue tiles ------------------------------------------------------
     forestHue = cv.imread("Resources/TileTemplates/H/ForestHue.png")
     grassHue = cv.imread("Resources/TileTemplates/H/GrassHue.png")
     mineHue = cv.imread("Resources/TileTemplates/H/MineHue.png")
     sandHue = cv.imread("Resources/TileTemplates/H/SandHue.png")
     wastesHue = cv.imread("Resources/TileTemplates/H/WastesHue.png")
-    waterHue = cv.imread("Resources/TileTemplates/H/WaterHue.png")
+    waterHue = cv.imread("Resources/TileTemplates/H/WaterHue2.png")
     # Saturation tiles -----------------------------------------------
     forestSaturation = cv.imread("Resources/TileTemplates/S/ForestSaturation.png")
     grassSaturation = cv.imread("Resources/TileTemplates/S/GrassSaturation.png")
     mineSaturation = cv.imread("Resources/TileTemplates/S/MineSaturation.png")
     sandSaturation = cv.imread("Resources/TileTemplates/S/SandSaturation.png")
     wastesSaturation = cv.imread("Resources/TileTemplates/S/WastesSaturation.png")
-    waterSaturation = cv.imread("Resources/TileTemplates/S/WaterSaturation.png")
+    waterSaturation = cv.imread("Resources/TileTemplates/S/WaterSaturation2.png")
     # Value tiles ------------------------------------------------------------------
     forestValue = cv.imread("Resources/TileTemplates/V/ForestValue.png")
     grassValue = cv.imread("Resources/TileTemplates/V/GrassValue.png")
     mineValue = cv.imread("Resources/TileTemplates/V/MineValue.png")
     sandValue = cv.imread("Resources/TileTemplates/V/SandValue.png")
     wastesValue = cv.imread("Resources/TileTemplates/V/WastesValue.png")
-    waterValue = cv.imread("Resources/TileTemplates/V/WaterValue.png")
+    waterValue = cv.imread("Resources/TileTemplates/V/WaterValue2.png")
 
     hsvImage = SplitHSV(imageInput)
     H = hsvImage[:, :, 0]
@@ -104,7 +104,7 @@ def IdentifyTiles(image):
             regionMeanHue = np.mean(regionHue)
             regionMeanSat = np.mean(regionSat)
             regionMeanVal = np.mean(regionVal)
-            identifiedTiles[j - 1, i - 1] = "x"
+            identifiedTiles[j - 1, i - 1] = 0
 
             for r in range(1, 7):
                 templateHue = templateH[r]
@@ -132,7 +132,7 @@ def IdentifyTiles(image):
                         tile = "d"  # wastes.. d (dead)
                     elif r == 6:
                         tile = "w"
-                    identifiedTiles[j - 1, i - 1] = tile
+                    identifiedTiles[j - 1, i - 1] = r
                     print(F"Tile identified on coordinates {i},{j}. Number of crowns on tile: {crownsTemp}")
                     match = False
 
