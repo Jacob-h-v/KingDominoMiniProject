@@ -29,7 +29,6 @@ def ignite_pixel(tiles, coordinate, id, crownsArray):
             if tiles[y, x] < 7:
                 crownCount += crownsArray[y, x]
                 connectedTiles += 1
-                print(f"Tile: {y},{x}. CrownCount: {crownCount}. Connected tiles: {connectedTiles}")
             tiles[y, x] = id
 
             if x + 1 < tiles.shape[1] and tiles[y, x + 1] == currentType:
@@ -53,13 +52,12 @@ def ignite_pixel(tiles, coordinate, id, crownsArray):
     return id, scoreCount
 
 
-def grassfire(tile, crowns):
+def grassfire(tiles, crownsArray):
     next_id = 50
-    tiles = tile
     totalScore = 0
     for y, row in enumerate(tiles):
         for x, pixel in enumerate(row):
-            next_id, points = ignite_pixel(tiles, (y, x), next_id, crowns)
+            next_id, points = ignite_pixel(tiles, (y, x), next_id, crownsArray)
             totalScore += points
     return totalScore
 

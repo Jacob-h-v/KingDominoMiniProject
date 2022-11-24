@@ -15,15 +15,10 @@ template = cv.imread("Resources/CrownTemplate.jpg")
 identifiedTiles, identifiedCrowns = IdentifyTiles(inputImage)
 print(identifiedTiles)
 print(identifiedCrowns)
-def GetTilesAndCrowns():
-    tiles = identifiedTiles
-    crowns = identifiedCrowns
-    return tiles, crowns
-
 
 
 # 3) Get point-giving stuff
-scoreCount = grassfire(identifiedTiles, identifiedTiles)
+scoreCount = grassfire(identifiedTiles, identifiedCrowns)
 print(scoreCount)
 
 # split image to H S and V channels. Might be useful for checking hue / value channels when matching areas
