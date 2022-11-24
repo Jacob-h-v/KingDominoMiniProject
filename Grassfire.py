@@ -1,3 +1,5 @@
+# Basic grassfire script source: Kode gennemgang, billedbehandling lecture 7
+
 from collections import deque
 
 # img = np.array([[2, 6, 1, 1, 1],
