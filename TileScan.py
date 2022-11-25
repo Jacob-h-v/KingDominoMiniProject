@@ -40,11 +40,6 @@ def IdentifyTiles(image):
     wastesValue = cv.imread("Resources/TileTemplates/V/WastesValue.png")
     waterValue = cv.imread("Resources/TileTemplates/V/WaterValue2.png")
 
-    hsvImage = SplitHSV(imageInput)
-    H = hsvImage[:, :, 0]
-    S = hsvImage[:, :, 1]
-    V = hsvImage[:, :, 2]
-
     row = 0
     column = 0
     match = False
@@ -119,20 +114,6 @@ def IdentifyTiles(image):
                 if hueVariance < 15 and valVariance < 25 and satVariance < 35:
                     match = True
                     matches += 1
-                    if r == 0:
-                        tile = "u"
-                    elif r == 1:
-                        tile = "f"
-                    elif r == 2:
-                        tile = "g"
-                    elif r == 3:
-                        tile = "m"
-                    elif r == 4:
-                        tile = "s"
-                    elif r == 5:
-                        tile = "d"  # wastes.. d (dead)
-                    elif r == 6:
-                        tile = "w"
                     identifiedTiles[j - 1, i - 1] = r
                     match = False
 

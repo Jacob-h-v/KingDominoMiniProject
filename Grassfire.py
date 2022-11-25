@@ -12,7 +12,7 @@ from collections import deque
                        # [0, 1, 0, 0, 0],
                        # [0, 2, 0, 2, 1],
                        # [0, 1, 0, 1, 0]], dtype=np.uint8)
-def ignite_pixel(tiles, coordinate, id, crownsArray):
+def IgniteTile(tiles, coordinate, id, crownsArray):
     y, x = coordinate
     burn_queue = deque()
 
@@ -51,7 +51,7 @@ def grassfire(tiles, crownsArray):
     totalScore = 0
     for y, row in enumerate(tiles):
         for x, pixel in enumerate(row):
-            next_id, points = ignite_pixel(tiles, (y, x), next_id, crownsArray)
+            next_id, points = IgniteTile(tiles, (y, x), next_id, crownsArray)
             totalScore += points
     return totalScore
 
