@@ -5,6 +5,7 @@ import imutils
 from HSVConvertion import SplitHSV
 from AreaMatching import GetArea, CropArea
 from TemplateMatching import MatchTemplate
+from CrownFinder import FindCrowns
 
 def IdentifyTiles(image):
 
@@ -80,17 +81,8 @@ def IdentifyTiles(image):
             x_start, y_start, x_end, y_end = GetArea(imageInput, row, column)
             region = CropArea(imageInput, x_start, y_start, x_end, y_end)
 
-            template90 = imutils.rotate(template, angle=90)
-            template180 = imutils.rotate(template, angle=180)
-            template270 = imutils.rotate(template, angle=270)
-
-            output1, matchCount1 = MatchTemplate(region, template, 0.75)
-            output2, matchCount2 = MatchTemplate(output1, template90, 0.75)
-            output3, matchCount3 = MatchTemplate(output2, template180, 0.75)
-            outputFinal, matchCount4 = MatchTemplate(output3, template270, 0.75)
-            matchCountFinal = matchCount1 + matchCount2 + matchCount3 + matchCount4
+            matchCountFinal = FindCrowns(region, template, 0.75)
             identifiedCrowns[j - 1, i - 1] = matchCountFinal
-            crownsTemp = matchCountFinal
             matchCountFinal = 0
 
             regionHSV = SplitHSV(region)
