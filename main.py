@@ -19,7 +19,6 @@ output3, matchCount3 = MatchTemplate(output2, template180, 0.75)
 outputFinal, matchCount4 = MatchTemplate(output3, template270, 0.75)
 
 
-
 # 2) identify tiles and check for crowns on each tile
 identifiedTiles, identifiedCrowns = IdentifyTiles(inputImage)
 print(identifiedTiles)

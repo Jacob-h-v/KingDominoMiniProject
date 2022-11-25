@@ -1,9 +1,5 @@
-import cv2 as cv
 import imutils
-import numpy as np
-from CropTemplate import TemplateCropping, Crop
 from TemplateMatching import MatchTemplate
-from HSVConvertion import SplitHSV
 
 def FindCrowns(region, template, threshold):
 
