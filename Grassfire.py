@@ -2,20 +2,12 @@
 
 from collections import deque
 
-# img = np.array([[2, 6, 1, 1, 1],
-              #  [2, 1, 1, 1, 2],
-              #  [2, 5, 0, 1, 2],
-              #  [2, 5, 6, 2, 2],
-              #  [1, 6, 6, 2, 4]], dtype=np.uint8)
-# crownsArray = np.array([[0, 0, 0, 0, 0],
-                       # [0, 0, 0, 1, 0],
-                       # [0, 1, 0, 0, 0],
-                       # [0, 2, 0, 2, 1],
-                       # [0, 1, 0, 1, 0]], dtype=np.uint8)
+
 def IgniteTile(tiles, coordinate, id, crownsArray):
     y, x = coordinate
     burn_queue = deque()
 
+    # Check if current coordinate has a value matching a tile type
     if tiles[y, x] == 1 or 2 or 3 or 4 or 5 or 6:
         currentType = tiles[y, x]
         crownCount = 0
@@ -26,6 +18,7 @@ def IgniteTile(tiles, coordinate, id, crownsArray):
         current_coordinate = burn_queue.pop()
         y, x = current_coordinate
         if tiles[y, x] == currentType:
+            # If tile is not already burnt, add values to crownCount and connectedTiles
             if tiles[y, x] < 7:
                 crownCount += crownsArray[y, x]
                 connectedTiles += 1
@@ -40,6 +33,7 @@ def IgniteTile(tiles, coordinate, id, crownsArray):
             if y - 1 >= 0 and tiles[y - 1, x] == currentType:
                 burn_queue.append((y - 1, x))
 
+        # when burn_queue is empty, return scoreCount for area and increase id (burn value)
         if len(burn_queue) == 0:
             scoreCount = crownCount * connectedTiles
             return id + 50, scoreCount
@@ -49,12 +43,9 @@ def IgniteTile(tiles, coordinate, id, crownsArray):
 def grassfire(tiles, crownsArray):
     next_id = 50
     totalScore = 0
+    # start IgniteTile for each coordinate in given tiles array
     for y, row in enumerate(tiles):
         for x, pixel in enumerate(row):
             next_id, points = IgniteTile(tiles, (y, x), next_id, crownsArray)
             totalScore += points
     return totalScore
-
-# TotalScore = grassfire(img)
-
-# print(F"Points on the board: {TotalScore}")

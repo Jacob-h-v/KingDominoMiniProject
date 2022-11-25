@@ -1,5 +1,6 @@
 import numpy as np
 
+# SplitHSV source: Image Processing lecture 2
 def SplitHSV(image):
     inputImage = image
     hsv_conversion = np.zeros(inputImage.shape, dtype=np.uint8)

@@ -1,10 +1,8 @@
 import cv2 as cv
 import numpy as np
-import imutils
 
 from HSVConvertion import SplitHSV
 from AreaMatching import GetArea, CropArea
-from TemplateMatching import MatchTemplate
 from CrownFinder import FindCrowns
 
 def IdentifyTiles(image):
@@ -12,28 +10,28 @@ def IdentifyTiles(image):
     imageInput = image
     template = cv.imread("Resources/CrownTemplate.jpg")
 
-    # RGB tiles ------------------------------------------------------
+    # Load RGB sample tiles ------------------------------------------------------
     forest = cv.imread("Resources/TileTemplates/Color/ForestColor.png")
     grass = cv.imread("Resources/TileTemplates/Color/GrassColor.png")
     mine = cv.imread("Resources/TileTemplates/Color/MineColor.png")
     sand = cv.imread("Resources/TileTemplates/Color/SandColor.png")
     wastes = cv.imread("Resources/TileTemplates/Color/WastesColor.png")
     water = cv.imread("Resources/TileTemplates/Color/WaterColor2.png")
-    # Hue tiles ------------------------------------------------------
+    # Load Hue sample tiles ------------------------------------------------------
     forestHue = cv.imread("Resources/TileTemplates/H/ForestHue.png")
     grassHue = cv.imread("Resources/TileTemplates/H/GrassHue.png")
     mineHue = cv.imread("Resources/TileTemplates/H/MineHue.png")
     sandHue = cv.imread("Resources/TileTemplates/H/SandHue.png")
     wastesHue = cv.imread("Resources/TileTemplates/H/WastesHue.png")
     waterHue = cv.imread("Resources/TileTemplates/H/WaterHue2.png")
-    # Saturation tiles -----------------------------------------------
+    # Load Saturation tiles -----------------------------------------------
     forestSaturation = cv.imread("Resources/TileTemplates/S/ForestSaturation.png")
     grassSaturation = cv.imread("Resources/TileTemplates/S/GrassSaturation.png")
     mineSaturation = cv.imread("Resources/TileTemplates/S/MineSaturation.png")
     sandSaturation = cv.imread("Resources/TileTemplates/S/SandSaturation.png")
     wastesSaturation = cv.imread("Resources/TileTemplates/S/WastesSaturation.png")
     waterSaturation = cv.imread("Resources/TileTemplates/S/WaterSaturation2.png")
-    # Value tiles ------------------------------------------------------------------
+    # Load Value tiles ------------------------------------------------------------------
     forestValue = cv.imread("Resources/TileTemplates/V/ForestValue.png")
     grassValue = cv.imread("Resources/TileTemplates/V/GrassValue.png")
     mineValue = cv.imread("Resources/TileTemplates/V/MineValue.png")
@@ -41,6 +39,7 @@ def IdentifyTiles(image):
     wastesValue = cv.imread("Resources/TileTemplates/V/WastesValue.png")
     waterValue = cv.imread("Resources/TileTemplates/V/WaterValue2.png")
 
+    # Declaring variables for later use
     row = 0
     column = 0
     match = False
@@ -48,6 +47,7 @@ def IdentifyTiles(image):
     identifiedTiles = np.zeros((5, 5), dtype=np.uint8)
     identifiedCrowns = np.zeros((5, 5), dtype=np.uint8)
 
+    # Calculate mean values for the samples
     meanHueForest = np.mean(forestHue)
     meanHueGrass = np.mean(grassHue)
     meanHueMine = np.mean(mineHue)
@@ -69,22 +69,27 @@ def IdentifyTiles(image):
     meanSaturationWastes = np.mean(wastesSaturation)
     meanSaturationWater = np.mean(waterSaturation)
 
+    # Putting sample mean values into arrays so the "r" loop can use them as identifiers
     templateH = [0, meanHueForest, meanHueGrass, meanHueMine, meanHueSand, meanHueWastes, meanHueWater]
     templateS = [0, meanSaturationForest, meanSaturationGrass, meanSaturationMine, meanSaturationSand, meanSaturationWastes,
              meanSaturationWater]
     templateV = [0, meanValueForest, meanValueGrass, meanValueMine, meanValueSand, meanValueWastes, meanValueWater]
 
+    # Loop over sets of coordinates in the tile array
     for i in range(1, 6):
         row = i
         for j in range(1, 6):
             column = j
+            # Crop out a part of the image corresponding to the tile's coordinate
             x_start, y_start, x_end, y_end = GetArea(imageInput, row, column)
             region = CropArea(imageInput, x_start, y_start, x_end, y_end)
 
+            # Check for crowns on the cropped out region
             matchCountFinal = FindCrowns(region, template, 0.75)
             identifiedCrowns[j - 1, i - 1] = matchCountFinal
             matchCountFinal = 0
 
+            # Split the tile image into H, S and V channels
             regionHSV = SplitHSV(region)
             regionHue = regionHSV[:, :, 0]
             regionSat = regionHSV[:, :, 1]
@@ -94,6 +99,7 @@ def IdentifyTiles(image):
             regionMeanVal = np.mean(regionVal)
             identifiedTiles[j - 1, i - 1] = 0
 
+            # Compare region to sample using absolute values
             for r in range(1, 7):
                 templateHue = templateH[r]
                 templateSat = templateS[r]
@@ -101,12 +107,9 @@ def IdentifyTiles(image):
                 hueVariance = abs(templateHue - regionMeanHue)
                 satVariance = abs(templateSat - regionMeanSat)
                 valVariance = abs(templateVal - regionMeanVal)
-                # MSE = MeanSquaredError(region, b)
 
                 if hueVariance < 15 and valVariance < 25 and satVariance < 35:
-                    match = True
                     matches += 1
                     identifiedTiles[j - 1, i - 1] = r
-                    match = False
 
     return identifiedTiles, identifiedCrowns

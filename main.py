@@ -13,6 +13,7 @@ template90 = imutils.rotate(template, angle=90)
 template180 = imutils.rotate(template, angle=180)
 template270 = imutils.rotate(template, angle=270)
 # marking crowns on output
+# (this is not where the crowns are *actually* identified for counting. This is merely for human readability)
 output1, matchCount1 = MatchTemplate(inputImage, template, 0.75)
 output2, matchCount2 = MatchTemplate(output1, template90, 0.75)
 output3, matchCount3 = MatchTemplate(output2, template180, 0.75)
